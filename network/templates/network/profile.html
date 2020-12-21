@@ -1,0 +1,38 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="card text-center">
+    <div class="card-header">
+        {{ user_page.username }}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{user_page.email}}</h5>
+        <p class="card-text">Posts made by {{user_page.username}}: {{ posts_count }}</p>
+        <p>Followed: {{ followed.count }}</p>
+        {% for follow in followed %}
+        <p><a href="{% url 'profile' follow.id %}">{{ follow.username }}</a></p>
+        {% endfor %}
+        {% if user.is_authenticated %}
+        {% if user.id != user_page.id %}
+        {% if follow_button %}
+        <a id="{{user_page.id}}" class="btn btn-danger" onclick="toggle_follow(this.id)">Unfollow</a>
+        {% else %}
+        <a id="{{user_page.id}}" class="btn btn-primary" onclick="toggle_follow(this.id)">Follow</a>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        <p>Followers: {{ followers_count }}</p>
+        {% for follower in person_followers %}
+        <p><a href="{% url 'profile' follower.owner.id %}">{{ follower.owner.username }}</a></p>
+        {% endfor %}
+    </div>
+    <div class="card-footer text-muted">
+        Last Log in: {{ user_page.last_login }}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
