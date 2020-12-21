@@ -101,7 +101,7 @@ def profile(request, id):
         'followed': followed.followers.all(),
         'person_followers': followers,
         'followers_count': len(followers),
-        'posts_count': Post.objects.filter(author=user_page).count(),
+        'posts': Post.objects.filter(author=user_page),
         'follow_button': follow_button
     })
 

@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">{{user_page.email}}</h5>
-        <p class="card-text">Posts made by {{user_page.username}}: {{ posts_count }}</p>
+        <p class="card-text">Posts made by {{user_page.username}}: {{ posts.count }}</p>
         <p>Followed: {{ followed.count }}</p>
         {% for follow in followed %}
         <p><a href="{% url 'profile' follow.id %}">{{ follow.username }}</a></p>
@@ -31,8 +31,22 @@
         Last Log in: {{ user_page.last_login }}
     </div>
 </div>
+<h2>Here all Posts made by user:</h2>
+{% for post in posts %}
+<div class="card m-3">
+    <div id="post_{{ post.id }}" class="card-body">
+      <h5 id="header">{{ post.header }}  {% if user.id == post.author.id %}<i id="{{ post.id }}" <i class='fas fa-edit' onclick="edit_post_form(this.id)"></i>{% endif %}</h5>
+      <hr>
+      <p id="text">{{ post.text }}</p>
+      <p id='like-data'><a id='{{ post.id }}' class="glyphicon glyphicon-thumbs-up" style="color: lightblue;" onclick="toggle_like(this)"></a><span id='like-count-{{ post.id }}'>  {{ post.like_set.all.count }}</span></p>
+      <p style="font-size: smaller; color:gray">{% if post.creation_date.date == post.edit_date.date %}Posted by <a href="{% url 'profile' post.author.id %}">{{ post.author }}</a> at {{ post.creation_date }}{% else %}Edited by <a href="#">{{ post.author }}</a> at {{ post.edit_date }}{% endif %}
+      </p>
+    </div>
+  </div>
+{% endfor %}
 {% endblock %}
 
 {% block script %}
 <script src="{% static 'network/profile.js' %}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 {% endblock %}
